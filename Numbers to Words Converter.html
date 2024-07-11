@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="The Numbers to Words Converter simplifies the process of translating numerical figures into written words. It's widely used in finance for check writing, in accounting for financial reporting clarity, and in education for enhancing understanding of numerical concepts.">
+  <meta name="keywords" content="Numbers to Words Converter">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Numbers to Words Converter</title>
+    <style>
+        /* General styles */
+      .calculator-box__main {
+        background: #fff;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        border-radius: 0.6em;
+        padding: 2em;
+        box-sizing: border-box;
+        color: #000;
+      }
+
+      .calculator-box {
+        width: 100%;
+        margin-bottom: 30px;
+      }
+
+      .calculator-operation__right {
+        text-align: end;
+      }
+
+      .calculator-operation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .calculator-operation__left,
+      .calculator-operation__right {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .app-font.calculator-text.calculator-text--large {
+        font-size: 1.3em;
+        padding: 0 0.3em;
+        margin: 0;
+      }
+
+      .calculator-operation__right {
+        text-align: end;
+      }
+
+      .calculator-input {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        flex: 0 0 calc(33.33% - 10px); /* 33.33% width for each input field on larger screens */
+      }
+
+      .calculator-box__main input {
+        text-align: right;
+        background: #efeff5;
+        border: 0;
+        outline: 0;
+        border-radius: 0.4em;
+        font-size: 1.4em;
+        font-weight: 300;
+        padding: 0.6em;
+        width: 7em;
+        -moz-appearance: textfield;
+      }
+
+      .calculator-button {
+        padding: 10px 20px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .calculator-button:hover {
+        background-color: #efeff5;
+        color: #000000;
+      }
+
+      .calculator-button:focus {
+        outline: none;
+        background-color: #000000;
+        color: #ffffff;
+      }
+
+        /* Added styles for new features and responsiveness */
+        .calculator-text--small {
+            font-size: 0.8em;
+        }
+
+        .calculator-text--extra-large {
+            font-size: 1.6em;
+        }
+
+        .calculator-input--checkbox {
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        
+        #letter-case{
+            width: 10em;
+        }
+
+        .calculator-textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 5px;
+            resize: none;
+        }
+
+        /* Media query for responsiveness */
+        @media (max-width: 768px) {
+            .calculator-input {
+                flex: 100%;
+                margin-top: 10px;
+                margin-right: 0;
+            }
+
+            .output-words{
+              width: 80%;
+              margin-left: 10px;
+              margin-bottom: 20px;
+            }
+
+            .input-number{
+              width: 30%;
+              margin-bottom: 4.5em;
+            }
+            
+            .calculator-button{
+                margin-right: 2.5em;
+            }
+
+            .calculator-operation__right {
+                flex-direction: column;
+                flex: 0 0 50%;
+            }
+
+            .calculator-input--checkbox {
+                margin-top: 10px;
+                margin-right: 0;
+            }
+
+            #letter-case{
+            width: 7.7em;
+        }
+      }
+
+      @media (max-width: 393px) {
+        .calculator-input {
+                flex: 100%;
+                margin-top: 10px;
+                margin-right: 0;
+            }
+            
+            .calculator-box__main input {
+                text-align: right;
+                background: #efeff5;
+                border: 0;
+                outline: 0;
+                border-radius: 0.4em;
+                font-size: 1.4em;
+                font-weight: 300;
+                padding: 0.6em;
+                width: 5.7em;
+            }
+
+            .output-words{
+              width: 80%;
+              margin-left: 10px;
+              margin-bottom: 20px;
+            }
+
+            .input-number{
+              width: 30%;
+              margin-bottom: 4.5em;
+            }
+
+            .calculator-operation__right {
+                flex-direction: column;
+                flex: 0 0 50%;
+            }
+
+            .calculator-input--checkbox {
+                margin-top: 10px;
+                margin-right: 0;
+            }
+
+            #letter-case{
+            width: 7.5em;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div class="calculator-box">
+        <div class="calculator-box__main">
+            <div class="calculator-operation">
+                <div class="calculator-operation__left">
+                    <div slot="left">
+                        <div class="app-font calculator-text calculator-text--large">
+                            Convert this Number:
+                        </div>
+                    </div>
+                    <div class="calculator-input">
+                        <input class="input-number" placeholder="0" type="number" value />
+                    </div>
+                </div>
+                <div class="calculator-operation__right">
+                    <div slot="right">
+                        <button style="margin-bottom:1.8em;" class="calculator-button" onclick="convertToWords()">Convert to Words</button>
+                        <div>
+
+                            <div class="calculator-input">
+                                <textarea class="output-words" placeholder="Words" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="calculator-input calculator-input--checkbox">
+                            <label for="currency">Currency:</label>
+                            <input type="checkbox" id="currency" name="feature" onchange="updateCheckbox(this)" />
+                        </div>
+                        <div class="calculator-input calculator-input--checkbox">
+                            <label for="check-writing">Check Writing:</label>
+                            <input type="checkbox" id="check-writing" name="feature" onchange="updateCheckbox(this)" />
+                        </div>
+                        <div class="calculator-input">
+                            <label for="letter-case">Letter Case:</label>
+                            <select id="letter-case">
+                                <option value="lowercase">Lowercase</option>
+                                <option value="uppercase">Uppercase</option>
+                                <option value="titlecase">Title Case</option>
+                                <option value="sentencecase">Sentence Case</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="calculator-box__history"></div>
+    </div>
+
+    <script>
+        function convertToWords() {
+            const number = parseInt(document.querySelector('.input-number').value) || 0;
+            const currency = document.getElementById('currency').checked;
+            const checkWriting = document.getElementById('check-writing').checked;
+            const letterCase = document.getElementById('letter-case').value;
+
+            let words = numberToWords(number);
+            if (currency) {
+                words += ' dollars';
+            }
+            if (checkWriting) {
+                words += ' and 00/100 dollars';
+            }
+            switch (letterCase) {
+                case 'lowercase':
+                    words = words.toLowerCase();
+                    break;
+                case 'uppercase':
+                    words = words.toUpperCase();
+                    break;
+                case 'titlecase':
+                    words = toTitleCase(words);
+                    break;
+                case 'sentencecase':
+                    words = toSentenceCase(words);
+                    break;
+                default:
+                    break;
+            }
+
+            document.querySelector('.output-words').value = words;
+        }
+
+        function numberToWords(number) {
+            // Logic to convert number to words
+            const ones = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+                          'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen',
+                          'Eighteen', 'Nineteen'];
+            const tens = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+            if (number === 0) return 'Zero';
+            if (number < 20) return ones[number];
+            if (number < 100) return tens[Math.floor(number / 10) - 2] + (number % 10 !== 0 ? '-' + ones[number % 10] : '');
+            if (number < 1000) return ones[Math.floor(number / 100)] + ' Hundred' + (number % 100 !== 0 ? ' ' + numberToWords(number % 100) : '');
+            if (number < 1,000) return ones[Math.floor(number / 100)] + ' Hundred' + (number % 100 !== 0 ? ' ' + numberToWords(number % 100) : '');
+            if (number < 10,000) return ones[Math.floor(number / 100)] + ' Hundred' + (number % 100 !== 0 ? ' ' + numberToWords(number % 100) : '');
+            if (number < 1000000) return numberToWords(Math.floor(number / 1000)) + ' Thousand' + (number % 1000 !== 0 ? ' ' + numberToWords(number % 1000) : '');
+            if (number < 10,000,00) return numberToWords(Math.floor(number / 1000)) + ' Thousand' + (number % 1000 !== 0 ? ' ' + numberToWords(number % 1000) : '');
+            if (number < 1000000000) return numberToWords(Math.floor(number / 1000000)) + ' Million' + (number % 1000000 !== 0 ? ' ' + numberToWords(number % 1000000) : '');
+            if (number < 10,000,0000,0) return numberToWords(Math.floor(number / 1000000)) + ' Million' + (number % 1000000 !== 0 ? ' ' + numberToWords(number % 1000000) : '');
+            if (number < 1000000000000) return numberToWords(Math.floor(number / 1000000000)) + ' Billion' + (number % 1000000000 !== 0 ? ' ' + numberToWords(number % 1000000000) : '');
+            if (number < 10,000,0000,0000) return numberToWords(Math.floor(number / 1000000000)) + ' Billion' + (number % 1000000000 !== 0 ? ' ' + numberToWords(number % 1000000000) : '');
+            return 'Number too large';
+        }
+
+        function toTitleCase(sentence) {
+            // Logic to convert string to title case
+            return sentence.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
+        function toSentenceCase(sentence) {
+            // Logic to convert string to sentence case
+            return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+        }
+
+        function updateCheckbox(checkbox) {
+            if (checkbox.checked) {
+                const checkboxes = document.querySelectorAll('input[name="feature"]');
+                checkboxes.forEach(cb => {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
